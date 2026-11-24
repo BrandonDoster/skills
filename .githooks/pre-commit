@@ -14,9 +14,7 @@ command -v gitleaks >/dev/null 2>&1 || fail "gitleaks not installed (winget inst
 # Private extra rules (work domain, personal emails, hostnames) live OUTSIDE the repo
 # so the patterns themselves never go public.
 CFG="$HOME/.config/gitleaks/private.toml"
-if [ -f "$CFG" ]; then
-  gitleaks git --pre-commit --staged --redact --no-banner --config "$CFG" || fail "gitleaks found something (see above)"
-else
-  echo "warning: $CFG missing, running default gitleaks rules only" >&2
-  gitleaks git --pre-commit --staged --redact --no-banner || fail "gitleaks found something (see above)"
-fi
+[ -f "$CFG" ] || fail "$CFG missing; ask the repo owner for it (private rules are not in this repo)"
+[ "$(git config core.hooksPath)" = ".githooks" ] || fail "core.hooksPath is not .githooks"
+[ "$(git config gpg.format)" = "ssh" ] || fail "gpg.format is not ssh"
+gitleaks git --pre-commit --staged --redact --no-banner --config "$CFG" || fail "gitleaks found something (see above). Remove it; do not allowlist."

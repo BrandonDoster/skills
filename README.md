@@ -13,11 +13,7 @@ Public Claude Code skills by Brandon Doster.
 
 ## Contributing / cloning
 
-Enable the guard hooks once per clone:
-
-```sh
-git config core.hooksPath .githooks
-```
+One-time setup per clone: see [AGENTS.md](AGENTS.md#clone-setup-once-per-machine).
 
 `pre-commit` runs gitleaks on staged changes and checks the commit identity and signing.
 `pre-push` rejects any commit that is unsigned or not from the GitHub noreply address.

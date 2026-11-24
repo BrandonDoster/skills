@@ -1,0 +1,22 @@
+#!/bin/sh
+# Public repo guard. Enable once per clone: git config core.hooksPath .githooks
+# Blocks the commit unless: identity is the GitHub noreply address, signing is on,
+# and gitleaks finds nothing in the staged changes. Fails closed if gitleaks is missing.
+set -e
+NOREPLY="158637640+BrandonDoster@users.noreply.github.com"
+
+fail() { echo "" >&2; echo "COMMIT BLOCKED: $1" >&2; echo "" >&2; exit 1; }
+
+[ "$(git config user.email)" = "$NOREPLY" ] || fail "user.email is '$(git config user.email)', expected $NOREPLY"
+[ "$(git config commit.gpgsign)" = "true" ] || fail "commit.gpgsign is not true"
+command -v gitleaks >/dev/null 2>&1 || fail "gitleaks not installed (winget install Gitleaks.Gitleaks)"
+
+# Private extra rules (work domain, personal emails, hostnames) live OUTSIDE the repo
+# so the patterns themselves never go public.
+CFG="$HOME/.config/gitleaks/private.toml"
+if [ -f "$CFG" ]; then
+  gitleaks git --pre-commit --staged --redact --no-banner --config "$CFG" || fail "gitleaks found something (see above)"
+else
+  echo "warning: $CFG missing, running default gitleaks rules only" >&2
+  gitleaks git --pre-commit --staged --redact --no-banner || fail "gitleaks found something (see above)"
+fi

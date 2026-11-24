@@ -1,0 +1,14 @@
+# Never commit secrets or machine-local config
+.env
+.env.*
+*.local.*
+settings.local.json
+*.pem
+*.key
+id_*
+*.pfx
+*.p12
+credentials*.json
+.DS_Store
+node_modules
+__pycache__/

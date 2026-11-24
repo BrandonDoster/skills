@@ -1,0 +1,43 @@
+{
+  "name": "op-cli",
+  "displayName": "Brandon — 1Password CLI",
+  "description": "1Password CLI skill plus hooks: each credential prompts once per Claude Code session (DPAPI-encrypted, session-owned cache), secrets never reach the transcript, and raw `op` commands are gated until the skill is loaded. Windows.",
+  "version": "1.1.0",
+  "author": {
+    "name": "Brandon Doster"
+  },
+  "license": "GPL-3.0",
+  "repository": "https://github.com/BrandonDoster/skills",
+  "keywords": ["1password", "op", "secrets", "windows"],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|Skill",
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/gate.mjs"], "timeout": 10 }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/gate.mjs"], "timeout": 10 }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/gate.mjs"], "timeout": 10 }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/gate.mjs"], "timeout": 10 }
+        ]
+      }
+    ]
+  }
+}

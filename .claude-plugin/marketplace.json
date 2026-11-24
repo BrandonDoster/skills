@@ -1,0 +1,23 @@
+{
+  "name": "brandon-skills",
+  "owner": {
+    "name": "Brandon Doster"
+  },
+  "description": "Brandon's public Claude Code plugins",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "op-cli",
+      "source": "op-cli",
+      "category": "security",
+      "description": "1Password CLI skill plus hooks: each credential prompts once per Claude Code session (DPAPI-encrypted, session-owned cache), secrets never reach the transcript, and raw `op` commands are gated until the skill is loaded. Windows.",
+      "keywords": [
+        "1password",
+        "secrets",
+        "windows"
+      ]
+    }
+  ]
+}
